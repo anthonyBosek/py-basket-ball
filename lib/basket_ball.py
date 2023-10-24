@@ -90,11 +90,10 @@ def game_dict():
                 },
             ],
         },
-            
         "away": {
             "team_name": "Washington Wizards",
             "colors": ["Red", "White", "Navy Blue"],
-            "players": [   
+            "players": [
                 {
                     "name": "Bradley Beal",
                     "number": 3,
@@ -179,6 +178,83 @@ def game_dict():
                     "height_inches": 80,
                     "shoe_brand": "Jordan",
                 },
-            ]
-        }
+            ],
+        },
     }
+
+
+def create_player_dict():
+    player_dict = {}
+    for team in game_dict():
+        for player in game_dict()[team]["players"]:
+            player_dict[player["name"]] = player
+    return player_dict
+
+
+def num_points_per_game(baller):
+    return create_player_dict()[baller]["points_per_game"]
+
+
+def player_age(baller):
+    return create_player_dict()[baller]["age"]
+
+
+def team_colors(_team):
+    for team in game_dict():
+        if game_dict()[team]["team_name"] == _team:
+            return game_dict()[team]["colors"]
+
+
+def team_names():
+    return [game_dict()[team]["team_name"] for team in game_dict()]
+    # return [team for team in game_dict()]
+    # # ["home"]["team_name"], game_dict()["away"]["team_name"]]
+    # return [game_dict()["home"]["team_name"], game_dict()["away"]["team_name"]]
+
+
+def player_numbers(_team):
+    for team in game_dict():
+        if game_dict()[team]["team_name"] == _team:
+            return [player["number"] for player in game_dict()[team]["players"]]
+
+
+def player_stats(baller):
+    return create_player_dict()[baller]
+
+
+# return average rebounds for all players with a given shoe brand
+def average_rebounds_by_shoe_brand():
+    brand_dict = {}
+    ballers = create_player_dict()
+    for baller in ballers:
+        shoe = ballers[baller]["shoe_brand"]
+        grabs = ballers[baller]["rebounds_per_game"]
+        if shoe in brand_dict:
+            brand_dict[shoe].append(grabs)
+        else:
+            brand_dict[shoe] = [grabs]
+    for shoe in brand_dict:
+        # brand_dict[shoe] = sum(brand_dict[shoe]) / len(brand_dict[shoe])
+        brand_dict[shoe] = sum(brand_dict[shoe]) / len(brand_dict[shoe])
+        print(f"{shoe}:  " "{0:.2f}".format(brand_dict[shoe]))
+
+
+# return player with most career points as dict {"name": "player_name", "career_points": 9999}
+def most_career_points():
+    max_points = 0
+    player_name = ""
+    for player in create_player_dict():
+        if create_player_dict()[player]["career_points"] > max_points:
+            max_points = create_player_dict()[player]["career_points"]
+            player_name = player
+    return {"name": player_name, "career_points": max_points}
+
+
+# print(create_player_dict())
+# print(num_points_per_game("Rui Hachimura"))
+# print(player_age("Rui Hachimura"))
+# print(team_colors("Washington Wizards"))
+# print(team_names())
+# print(player_numbers("Washington Wizards"))
+# print(player_stats("Kristaps Porzingis"))
+# average_rebounds_by_shoe_brand()
